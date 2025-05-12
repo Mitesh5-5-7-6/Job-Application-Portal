@@ -26,37 +26,44 @@ export const JobApplicationPanel: React.FC<jobApplicationPanelType> = () => {
 
     const handleSubmitForm = (e: any) => {
         e.preventDefault();
+        if (formData.name === '' || formData.email === '' || formData.phone === '' || formData.resume === null) {
+            alert("Enter * value")
+        } else {
+            setFormData({
+                name: formData.name.trim(),
+                email: formData.email.trim(),
+                phone: formData.phone.trim(),
+                message: formData.message.trim(),
+                resume: formData.resume ? formData.resume.name : null
+            })
 
-        setFormData({
-            name: formData.name.trim(),
-            email: formData.email.trim(),
-            phone: formData.phone.trim(),
-            message: formData.message.trim(),
-            resume: formData.resume ? formData.resume.name : null
-        })
+            const dataToStore = {
+                id: new Date(),
+                ...formData,
+                resume: formData.resume ? formData.resume.name : null,
+                submittedAt: new Date().toISOString(),
+            };
 
-        const dataToStore = {
-            id: new Date(),
-            ...formData,
-            resume: formData.resume ? formData.resume.name : null,
-            submittedAt: new Date().toISOString(),
-        };
+            const existingData = JSON.parse(localStorage.getItem('jobFormData') || '[]');
+            const updatedData = [...existingData, dataToStore];
+            localStorage.setItem('jobFormData', JSON.stringify(updatedData));
 
-        const existingData = JSON.parse(localStorage.getItem('jobFormData') || '[]');
-        const updatedData = [...existingData, dataToStore];
-        localStorage.setItem('jobFormData', JSON.stringify(updatedData));
+            setFormData(formData)
+        }
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmitForm}>
-                <InputField label='Name' type='text' name='name' placeholder='Enter Name' onChange={handleChange} />
-                <InputField label='Email' type='email' name='email' placeholder='Enter Email' onChange={handleChange} />
-                <InputField label='Phone' type='tel' name='phone' placeholder='Enter Phone Number' onChange={handleChange} />
-                <InputField label='Message' type='text' name='message' placeholder='Enter Message' onChange={handleChange} />
-                <InputField label='Resume Upload' type='file' name='resume' accept='.pdf' onChange={handleChange} />
-                <button type='submit' className='bg-emerald-200 px-4 py-2 rounded-lg mt-2'>Submit Form</button>
-            </form>
+        <div className='bg-indigo-500 h-[90vh]'>
+            <div className='w-1/3 mx-auto'>
+                <form onSubmit={handleSubmitForm} className='p-10'>
+                    <InputField label='Name*' type='text' name='name' placeholder='Enter Name' value={formData.name} onChange={handleChange} />
+                    <InputField label='Email*' type='email' name='email' placeholder='Enter Email' value={formData.email} onChange={handleChange} />
+                    <InputField label='Phone*' type='tel' name='phone' placeholder='Enter Phone Number' value={formData.phone} onChange={handleChange} />
+                    <InputField label='Message (optional)' type='text' name='message' placeholder='Enter Message' value={formData.message} onChange={handleChange} />
+                    <InputField label='Resume Upload*' type='file' name='resume' accept='.pdf' onChange={handleChange} />
+                    <button type='submit' className='bg-emerald-200 cursor-pointer px-4 py-2 rounded-lg mt-2'>Submit Form</button>
+                </form>
+            </div>
         </div>
     );
 };

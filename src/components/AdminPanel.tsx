@@ -47,6 +47,7 @@ export const AdminPanel: React.FC = () => {
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
+            <th>Message</th>
             <th>Resume</th>
           </tr>
         </thead>
@@ -56,24 +57,29 @@ export const AdminPanel: React.FC = () => {
               <td className='py-1 border-b-1'>{row.name}</td>
               <td className='py-1 border-b-1'>{row.email}</td>
               <td className='py-1 border-b-1'>{row.phone}</td>
+              <td className='py-1 border-b-1'>{row.message}</td>
               <td className='py-1 border-b-1'>{row.resume}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className='flex justify-center mt-4 gap-2'>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 cursor-pointer py-1 rounded ${currentPage === i + 1
-              ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
-          >
-            {i + 1}
-          </button>
-        ))}
+      <div className='flex justify-between px-4 mt-4'>
+        <p>Total Data : {filteredData.length}</p>
+        <div className='flex gap-2'>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 cursor-pointer py-1 rounded ${currentPage === i + 1
+                ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </div>
+
     </>
   );
 };
